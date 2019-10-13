@@ -53,3 +53,52 @@ exports.requireUser = function (req, res, next) {
 		next();
 	}
 };
+
+
+exports.checkAuth = function(req, res, next) {
+    if (!req.headers.authorization) {
+        return res.status(400).json({
+            error: {
+                message: 'Invalidated.',
+                detail: '400. Middleware. Token is not exist in headers.'
+            }
+        });
+    }
+
+    keystone.list('AuthToken').model.findOne({ token: req.headers.authorization }).exec((err, token) => {
+        if (err) return res.status(500).json({
+            error: {
+                message: 'Server error',
+                detail: '500. Middleware error. When find AuthToken model.'
+            }
+        });
+        if (!token) {
+            return res.status(401).json({
+                error: {
+                    message: "Unauthorized account.",
+                    detail: "401. Middleware authToken."
+                }
+            });
+        } else {
+            keystone.list('User').model.findOne({ _id: token.user_id }).exec((err, user) => {
+                if (err) return res.status(500).json({
+                    error: {
+                        message: 'Server error',
+                        detail: '500. Middleware error. When find user model.'
+                    }
+                });
+                if (!user) {
+                    return res.status(401).json({
+                        error: {
+                            message: "Unauthorized account.",
+                            detail: "401. Middleware user."
+                        }
+                    });
+                } else {
+                    req.user = user;
+                    next();
+                }
+            });
+        }
+    });
+}

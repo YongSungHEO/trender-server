@@ -51,6 +51,9 @@ exports = module.exports = function (app) {
     // Sign in
     app.post('/api/v1/my/signin', routes.auth.signin.signIn);
 
+    // Log out
+    app.get('/api/v1/my/logout', middleware.checkAuth, routes.auth.logout.logout);
+
 	// NOTE: To protect a route so that only admins can see it, use the requireUser middleware:
 	// app.get('/protected', middleware.requireUser, routes.views.protected);
 
