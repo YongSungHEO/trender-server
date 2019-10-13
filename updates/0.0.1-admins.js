@@ -9,7 +9,8 @@
 
 exports.create = {
 	User: [
-		{ 'name.first': 'Admin', 'name.last': 'User', 'email': 'info@trender.com', 'password': 'trendish', 'isAdmin': true, 'hint': 'snowflower' },
+        { 'name.first': 'Admin', 'name.last': 'User', 'email': 'info@trender.com', 'password': 'trendish', 'isAdmin': true,
+            'nickname': 'admin', 'passwordHash': 'rkskekfkakqktk', 'hint': 'snowflower' },
 	],
 };
 

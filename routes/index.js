@@ -42,6 +42,11 @@ exports = module.exports = function (app) {
 
 	// Views
     app.get('/', routes.views.index);
+    
+    // Sign up
+    app.post('/api/v1/my/signup', routes.auth.signup.signUp);
+    app.post('/api/v1/my/checkemail', routes.auth.signup.checkEmail);
+    app.post('/api/v1/my/checkname', routes.auth.signup.checkName);
 
 	// NOTE: To protect a route so that only admins can see it, use the requireUser middleware:
 	// app.get('/protected', middleware.requireUser, routes.views.protected);
