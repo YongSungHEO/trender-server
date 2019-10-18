@@ -24,6 +24,7 @@ User.schema.virtual('canAccessKeystone').get(function () {
 });
 
 User.relationship({ path: 'tokens', ref: 'AuthToken', refPath: 'user_id' });
+User.relationship({ path: 'posts', ref: 'Post', refPath: 'user_id' });
 
 
 /**
