@@ -4,14 +4,14 @@ var sha256 = require('sha-256-js');
 var User = keystone.list('User');
 
 
-exports.signUp = function(req, res) {
+exports.signUp = function (req, res) {
     if (signUpValidation(req.body.userModel, res)) {
         let newUser = new User.model({
             email: req.body.userModel.email,
             password: sha256(req.body.userModel.password),
             passwordHash: sha256(req.body.userModel.password),
             nickname: req.body.userModel.name,
-            hint: req.body.userModel.hint
+            hint: req.body.userModel.hint,
         });
 
         newUser.save(function (err, createdUser) {
@@ -23,10 +23,10 @@ exports.signUp = function(req, res) {
             return res.status(200).json({ result: 'Success' });
         });
     }
-}
+};
 
 
-exports.checkEmail = function(req, res) {
+exports.checkEmail = function (req, res) {
     if (!req.body.email) {
         let message = 'Email is required.';
         let detail = '400. When req email empty.';
@@ -46,10 +46,10 @@ exports.checkEmail = function(req, res) {
             return res.status(200).json({ result: 'Email is not overlapped' });
         }
     });
-}
+};
 
 
-exports.checkName = function(req, res) {
+exports.checkName = function (req, res) {
     if (!req.body.name) {
         let message = 'Name is required.';
         let detail = '400. When req name is empty.';
@@ -69,10 +69,10 @@ exports.checkName = function(req, res) {
             return res.status(200).json({ result: 'Name is not overlapped' });
         }
     });
-}
+};
 
 
-function signUpValidation(userModel, res) {
+function signUpValidation (userModel, res) {
     if (!userModel.email) {
         error400('Email is not exist.', '400. When signup.', res);
         return false;
@@ -104,8 +104,8 @@ function error400(message, detail, res) {
     return res.status(400).json({
         error: {
             message: message,
-            detail: detail
-        }
+            detail: detail,
+        },
     });
 }
 
@@ -113,7 +113,7 @@ function error500(message, detail, res) {
     return res.status(500).json({
         error: {
             message: message,
-            detail: detail
-        }
+            detail: detail,
+        },
     });
 }

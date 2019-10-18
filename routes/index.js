@@ -29,20 +29,20 @@ keystone.pre('render', middleware.flashMessages);
 // Import Route Controllers
 var routes = {
     views: importRoutes('./views'),
-    auth: importRoutes('./api/v1/auth')
+    auth: importRoutes('./api/v1/auth'),
 };
 
 // Setup Route Bindings
 exports = module.exports = function (app) {
     // Cross Origin Resource Sharing
     app.all('/api*', keystone.middleware.cors);
-    app.options('/api*', function(req, res) {
+    app.options('/api*', function (req, res) {
         res.sendStatus(200);
     });
 
 	// Views
     app.get('/', routes.views.index);
-    
+
     // Sign up
     app.post('/api/v1/my/signup', routes.auth.signup.signUp);
     app.post('/api/v1/my/checkemail', routes.auth.signup.checkEmail);

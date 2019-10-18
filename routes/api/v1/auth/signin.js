@@ -6,7 +6,7 @@ var User = keystone.list('User');
 var AuthToken = keystone.list('AuthToken');
 
 
-exports.signIn = function(req, res) {
+exports.signIn = function (req, res) {
     if (loginValidation(req.body.userModel, res)) {
         const email = req.body.userModel.email;
         const password = sha256(req.body.userModel.password);
@@ -39,12 +39,12 @@ exports.signIn = function(req, res) {
                         }
                         return res.status(200).json({
                             authToken: updatedToken.token,
-                            nickname: user.nickname
+                            nickname: user.nickname,
                         });
                     });
                 } else {
                     let newAuthToken = new AuthToken.model({
-                        user_id: user._id
+                        user_id: user._id,
                     });
                     newAuthToken.save((err, createdAuth) => {
                         if (err) {
@@ -54,17 +54,17 @@ exports.signIn = function(req, res) {
                         }
                         return res.status(200).json({
                             authToken: createdAuth.token,
-                            nickname: user.nickname
+                            nickname: user.nickname,
                         });
                     });
                 }
             });
         });
     }
-}
+};
 
 
-function loginValidation(userModel, res) {
+function loginValidation (userModel, res) {
     let regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
     if (!userModel.email.match(regExp)) {
         let message = 'Email format is wrong.';
@@ -81,11 +81,11 @@ function loginValidation(userModel, res) {
     return true;
 }
 
-function error(message, detail, res, status) {
+function error (message, detail, res, status) {
     return res.status(status).json({
         error: {
             message: message,
             detail: detail
-        }
+        },
     });
 }
