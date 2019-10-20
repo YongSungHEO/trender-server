@@ -29,6 +29,7 @@ keystone.pre('render', middleware.flashMessages);
 // Import Route Controllers
 var routes = {
     views: importRoutes('./views'),
+    api: importRoutes('./api/v1'),
     auth: importRoutes('./api/v1/auth'),
 };
 
@@ -53,6 +54,16 @@ exports = module.exports = function (app) {
 
     // Log out
     app.get('/api/v1/my/logout', middleware.checkAuth, routes.auth.logout.logout);
+
+    // Request category
+    app.post('/api/v1/category-requests', middleware.checkAuth, routes.api.request.create);
+    app.put('/api/v1/category-requests', middleware.checkAuth, routes.api.request.update);
+
+    // Post
+    app.post('/api/v1/posts', middleware.checkAuth, routes.api.post.create);
+    app.put('/api/v1/posts', middleware.checkAuth, routes.api.post.update);
+    app.get('/api/v1/posts/:id', middleware.checkAuth, routes.api.post.list);
+    app.delete('/api/v1/posts/:id', middleware.checkAuth, routes.api.post.delete);
 
 	// NOTE: To protect a route so that only admins can see it, use the requireUser middleware:
 	// app.get('/protected', middleware.requireUser, routes.views.protected);
