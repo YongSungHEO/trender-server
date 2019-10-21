@@ -8,14 +8,15 @@ Request.add({
         { value: 'post', label: '게시글' },
         { value: 'album', label: '앨범' },
     ] },
-    categoryName: { type: String, initial: true, required: true, unique: true, noedit: true },
+    categoryName: { type: String, initial: true, required: true, noedit: true },
     description: { type: Types.Text, initial: true, required: true, noedit: true },
     nickname: { type: String, initial: true, required: true, noedit: true },
-    state: { type: Types.Select, require: true, initial: true, options: [
+    state: { type: Types.Select, require: true, initial: true, default: 'wait', options: [
         { value: 'wait', label: '대기중' },
         { value: 'permitted', label: '승인됨' },
-        { value: 'refused', label: '거절됨' },
+        { value: 'rejected', label: '거절됨' },
     ] },
+    resultMessage: { type: Types.Text },
     requestTime: { type: Date, required: true, initial: true, noedit: true, default: Date.now },
 });
 
