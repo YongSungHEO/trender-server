@@ -61,9 +61,9 @@ exports = module.exports = function (app) {
 
     // Post
     app.post('/api/v1/posts', middleware.checkAuth, routes.api.post.create);
-    app.put('/api/v1/posts', middleware.checkAuth, routes.api.post.update);
-    app.get('/api/v1/posts/:id', middleware.checkAuth, routes.api.post.list);
-    app.delete('/api/v1/posts/:id', middleware.checkAuth, routes.api.post.delete);
+    app.put('/api/v1/posts-reply', middleware.checkAuth, routes.api.post.updateReply);
+    app.get('/api/v1/posts/:page', middleware.checkAuth, routes.api.post.list);
+    app.delete('/api/v1/posts', middleware.checkAuth, routes.api.post.delete);
 
 	// NOTE: To protect a route so that only admins can see it, use the requireUser middleware:
 	// app.get('/protected', middleware.requireUser, routes.views.protected);

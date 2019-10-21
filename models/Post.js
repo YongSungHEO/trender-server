@@ -10,7 +10,7 @@ Post.add({
         { value: 'post', label: '게시글' },
         { value: 'album', label: '앨범' },
     ] },
-	categoryName: { type: String, initial: true, required: true, unique: true, noedit: true },
+	categoryName: { type: String, initial: true, required: true, noedit: true },
     title: { type: String, initial: true, required: true, noedit: true },
     description: { type: Types.Text, initial: true, required: true, noedit: true },
     imageURL: { type: String, noedit: true },
