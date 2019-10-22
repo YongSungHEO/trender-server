@@ -70,6 +70,24 @@ exports.update = function (req, res) {
 };
 
 
+exports.list = function (req, res) {
+    // TODO: Classfy detail admin level.
+    if (!req.user.adminLevel) {
+        let message = 'Not permitted to access.';
+        let detail = '403. Not admin level.';
+        return error(message, detail, res, 403);
+    }
+    Request.model.find().sort('-requestTime').exec((err, requests) => {
+        if (err) {
+            let message = 'Server error.';
+            let detail = '500. When get list of requests.';
+            return error(message, detail, res, 500);
+        }
+        return res.status(200).json({ requests: requests });
+    });
+}
+
+
 function createRequestValidation (request, res) {
     if (!request.category) {
         let message = 'Category is required.';
