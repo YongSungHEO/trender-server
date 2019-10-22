@@ -26,27 +26,31 @@ exports.create = function (req, res) {
 
 exports.update = function (req, res) {
     if (updateRequestValidation(req.body, res)) {
-        Request.model.findOne({ _id: req.body._id }).exec((err, request) => {
+        Request.model.findOne({ _id: req.body.request_id }).exec((err, request) => {
             if (request.state === 'permitted' || request.state === 'rejected') {
                 let message = 'Already permitted or rejected.';
                 let detail = '400. Request already updated.';
                 return error (message, detail, res, 400);
             }
             request.state = req.body.state;
+            let promise1;
             if (request.state === 'permitted') {
                 request.resultMessage = 'Category is permitted.';
+                promise1 = new Promise((resolve, reject) => {
+                    request.save((err, updated) => {
+                        if (err) {
+                            reject(err);
+                        }
+                        resolve(updated);
+                    });
+                });
             }
             if (request.state === 'rejected') {
                 request.resultMessage = req.body.resultMessage;
-            }
-            let promise1 = new Promise((resolve, reject) => {
-                request.save((err, updated) => {
-                    if (err) {
-                        reject(err);
-                    }
-                    resolve(updated);
+                promise1 = new Promise((resolve) => {
+                    resolve('pass')
                 });
-            });
+            }
             let newCategory = new Category.model({
                 category: request.category,
                 categoryName: request.categoryName,
