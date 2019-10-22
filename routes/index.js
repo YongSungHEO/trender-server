@@ -55,6 +55,10 @@ exports = module.exports = function (app) {
     // Log out
     app.get('/api/v1/my/logout', middleware.checkAuth, routes.auth.logout.logout);
 
+    // Find account
+    app.post('/api/v1/my/id', routes.auth.find.findId);
+    app.post('/api/v1/my/password', routes.auth.find.findPassword);
+
     // Request category
     app.post('/api/v1/category-requests', middleware.checkAuth, routes.api.request.create);
     app.put('/api/v1/category-requests', middleware.checkAuth, routes.api.request.update);
