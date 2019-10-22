@@ -14,6 +14,7 @@ User.add({
     nickname: { type: String, required: true, initial: true, unique: true, noedit: true },
     passwordHash: { type: String, required: true, initial: true, noedit: true },
     hint: { type: String, required: true, initial: true },
+    adminLevel: { type: Number, default: 0 },
 }, 'Permissions', {
 	isAdmin: { type: Boolean, label: 'Can access Keystone', index: true },
 });

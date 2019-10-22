@@ -51,6 +51,7 @@ exports = module.exports = function (app) {
 
     // Sign in
     app.post('/api/v1/my/signin', routes.auth.signin.signIn);
+    app.get('/api/v1/my/info', middleware.checkAuth, routes.auth.signin.info);
 
     // Log out
     app.get('/api/v1/my/logout', middleware.checkAuth, routes.auth.logout.logout);

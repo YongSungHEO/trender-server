@@ -40,6 +40,7 @@ exports.signIn = function (req, res) {
                         return res.status(200).json({
                             authToken: updatedToken.token,
                             nickname: user.nickname,
+                            adminLevel: user.adminLevel,
                         });
                     });
                 } else {
@@ -55,6 +56,7 @@ exports.signIn = function (req, res) {
                         return res.status(200).json({
                             authToken: createdAuth.token,
                             nickname: user.nickname,
+                            adminLevel: user.adminLevel,
                         });
                     });
                 }
@@ -62,6 +64,14 @@ exports.signIn = function (req, res) {
         });
     }
 };
+
+
+exports.info = function (req, res) {
+    return res.status(200).json({
+        nickname: req.user.nickname,
+        adminLevel: req.user.adminLevel,
+    });
+}
 
 
 function loginValidation (userModel, res) {
