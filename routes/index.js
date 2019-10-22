@@ -65,6 +65,9 @@ exports = module.exports = function (app) {
     app.put('/api/v1/category-requests', middleware.checkAuth, routes.api.request.update);
     app.get('/api/v1/category-requests', middleware.checkAuth, routes.api.request.list);
 
+    // Get category
+    app.get('/api/v1/categories', routes.api.category.list);
+
     // Post
     app.post('/api/v1/posts', middleware.checkAuth, routes.api.post.create);
     app.put('/api/v1/posts-reply', middleware.checkAuth, routes.api.post.updateReply);
