@@ -10,7 +10,7 @@ exports.create = function (req, res) {
             category: req.body.category,
             categoryName: req.body.categoryName,
             description: req.body.description,
-            nickname: req.body.nickname,
+            nickname: req.user.nickname,
         });
         newRequest.save ((err, created) => {
             if (err) {
@@ -33,40 +33,40 @@ exports.update = function (req, res) {
                 return error (message, detail, res, 400);
             }
             request.state = req.body.state;
-            let promise1;
-            if (request.state === 'permitted') {
-                request.resultMessage = 'Category is permitted.';
-                promise1 = new Promise((resolve, reject) => {
-                    request.save((err, updated) => {
-                        if (err) {
-                            reject(err);
-                        }
-                        resolve(updated);
-                    });
+            let promise1 = new Promise((resolve, reject) => {
+                if (request.state === 'permitted') {
+                    request.resultMessage = 'Category is permitted.';
+                } else {
+                    request.resultMessage = req.body.resultMessage;
+                }
+                request.save((err, updated) => {
+                    if (err) {
+                        reject(err);
+                    }
+                    resolve(updated);
                 });
-            }
-            if (request.state === 'rejected') {
-                request.resultMessage = req.body.resultMessage;
-                promise1 = new Promise((resolve) => {
-                    resolve('pass')
-                });
-            }
+            });
             let newCategory = new Category.model({
                 category: request.category,
                 categoryName: request.categoryName,
                 creator: request.nickname
             });
             let promise2 = new Promise((resolve, reject) => {
-                newCategory.save((err, created) => {
-                    if (err) {
-                        reject(err);
-                    }
-                    resolve(created);
-                });
+                if (request.state === 'permitted') {
+                    newCategory.save((err, created) => {
+                        if (err) {
+                            reject(err);
+                        }
+                        resolve(created);
+                    });
+                } else {
+                    resolve('pass');
+                }
             });
             Promise.all([promise1, promise2]).then(results => {
                 return res.status(200).json({ result: 'Success' });
             }).catch(err => {
+                console.log(err)
                 return error('Server error.', '500. In update request API.', res, 500);
             });
         });
@@ -113,12 +113,6 @@ function createRequestValidation (request, res) {
     if (!request.description) {
         let message = 'Description is required.';
         let detail = '400. Description is empty.';
-        error (message, detail, res, 400);
-        return false;
-    }
-    if (!request.nickname) {
-        let message = 'Nickname is required.';
-        let detail = '400. Nickname is empty.';
         error (message, detail, res, 400);
         return false;
     }
