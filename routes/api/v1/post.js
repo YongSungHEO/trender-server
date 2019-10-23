@@ -61,7 +61,7 @@ exports.updateReply = function (req, res) {
 
 
 exports.list = function (req, res) {
-    Post.model.find({}, { user_id: 0 })
+    Post.model.find({ category: req.query.category, categoryName: req.query.categoryName}, { user_id: 0 })
         .sort('-created')
         .skip((req.params.page - 1) * 5)
         .limit(5)
