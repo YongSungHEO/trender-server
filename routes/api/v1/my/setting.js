@@ -2,6 +2,7 @@ var keystone = require('keystone');
 var sha256 = require('sha-256-js');
 
 var Post = keystone.list('Post');
+var Request = keystone.list('Request');
 
 
 exports.modifyPassword = function (req, res) {
@@ -48,6 +49,40 @@ exports.myPosts = function (req, res) {
     }).catch(err => {
         let message = 'Server error.';
         let detail = '500. When find my posts.';
+        return error(message, detail, res, 500);
+    });
+};
+
+
+exports.myRequest = function (req, res) {
+    let promise1 = new Promise((resolve, reject) => {
+        Request.model.find({ nickname: req.user.nickname }).count().exec((err, count) => {
+            if (err) {
+                reject(err);
+            }
+            resolve(count);
+        });
+    });
+    let promise2 = new Promise((resolve, reject) => {
+        Request.model.find({ nickname: req.user.nickname }, { user_id: 0 })
+            .sort('-requestTime')
+            .skip((req.params.page - 1) * 7)
+            .limit(7)
+            .exec((err, posts) => {
+                if (err) {
+                    reject(err);
+                }
+                resolve(posts);
+            });
+    });
+    Promise.all([promise1, promise2]).then(results => {
+        return res.status(200).json({
+            count: results[0],
+            requests: results[1],
+        })
+    }).catch(err => {
+        let message = 'Server error.';
+        let detail = '500. When find my requests.';
         return error(message, detail, res, 500);
     });
 };

@@ -64,6 +64,7 @@ exports = module.exports = function (app) {
     // Setting
     app.post('/api/v1/my/modify-password', middleware.checkAuth, routes.my.setting.modifyPassword);
     app.get('/api/v1/my/posts/:page', middleware.checkAuth, routes.my.setting.myPosts);
+    app.get('/api/v1/my/requests/:page', middleware.checkAuth, routes.my.setting.myRequest);
 
     // Request category
     app.post('/api/v1/category-requests', middleware.checkAuth, routes.api.request.create);
