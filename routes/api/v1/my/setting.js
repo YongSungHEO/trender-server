@@ -1,4 +1,7 @@
+var keystone = require('keystone');
 var sha256 = require('sha-256-js');
+
+var Post = keystone.list('Post');
 
 
 exports.modifyPassword = function (req, res) {
@@ -13,6 +16,40 @@ exports.modifyPassword = function (req, res) {
             return res.status(200).json({ result: 'Success' });
         });
     }
+};
+
+
+exports.myPosts = function (req, res) {
+    let promise1 = new Promise((resolve, reject) => {
+        Post.model.find({ user_id: req.user._id }).count().exec((err, count) => {
+            if (err) {
+                reject(err);
+            }
+            resolve(count);
+        });
+    });
+    let promise2 = new Promise((resolve, reject) => {
+        Post.model.find({ user_id: req.user._id }, { user_id: 0 })
+            .sort('-created')
+            .skip((req.params.page - 1) * 7)
+            .limit(7)
+            .exec((err, posts) => {
+                if (err) {
+                    reject(err);
+                }
+                resolve(posts);
+            });
+    });
+    Promise.all([promise1, promise2]).then(results => {
+        return res.status(200).json({
+            count: results[0],
+            posts: results[1],
+        })
+    }).catch(err => {
+        let message = 'Server error.';
+        let detail = '500. When find my posts.';
+        return error(message, detail, res, 500);
+    });
 };
 
 
