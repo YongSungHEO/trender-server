@@ -11,7 +11,7 @@ Post.add({
         { value: 'album', label: '앨범' },
     ] },
 	categoryName: { type: String, initial: true, required: true, noedit: true },
-    title: { type: String, initial: true, required: true, noedit: true },
+    title: { type: String, initial: true, noedit: true },
     description: { type: Types.Text, initial: true, required: true, noedit: true },
     imageURL: { type: String, noedit: true },
     like: { type: Number, noedit: true, default: 0 },

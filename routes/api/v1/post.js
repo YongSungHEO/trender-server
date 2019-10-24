@@ -107,7 +107,7 @@ function createValidation (post, res) {
         error (message, detail, res, 400);
         return false;
     }
-    if (!post.title) {
+    if (!post.title && post.category === 'post') {
         let message = 'Title is required.';
         let detail = '400. Create post validation.'
         error (message, detail, res, 400);
