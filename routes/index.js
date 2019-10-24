@@ -31,6 +31,7 @@ var routes = {
     views: importRoutes('./views'),
     api: importRoutes('./api/v1'),
     auth: importRoutes('./api/v1/auth'),
+    my: importRoutes('./api/v1/my'),
 };
 
 // Setup Route Bindings
@@ -59,6 +60,9 @@ exports = module.exports = function (app) {
     // Find account
     app.post('/api/v1/my/id', routes.auth.find.findId);
     app.post('/api/v1/my/password', routes.auth.find.findPassword);
+
+    // Setting
+    app.post('/api/v1/my/modify-password', middleware.checkAuth, routes.my.setting.modifyPassword);
 
     // Request category
     app.post('/api/v1/category-requests', middleware.checkAuth, routes.api.request.create);
