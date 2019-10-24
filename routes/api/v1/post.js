@@ -37,10 +37,12 @@ exports.updateReply = function (req, res) {
             let index = post.reply.findIndex(reply => reply._id.equals(req.body.reply._id));
             if (index < 0) {
                 req.body.reply.user_id = req.user._id;
+                req.body.reply.nickname = req.user.nickname;
                 post.reply.unshift(req.body.reply);
             } else {
                 post.reply[index] = req.body.reply;
                 post.reply[index].user_id = req.user._id;
+                post.reply[index].nickname = req.user.nickname;
             }
         } else {
             let index = post.reply.findIndex(reply => reply._id.equals(req.body.reply_id));
@@ -61,7 +63,8 @@ exports.updateReply = function (req, res) {
 
 
 exports.list = function (req, res) {
-    Post.model.find({ category: req.query.category, categoryName: req.query.categoryName}, { user_id: 0 })
+    Post.model
+        .find({ category: req.query.category, categoryName: req.query.categoryName}, { user_id: 0, 'reply.user_id': 0 })
         .sort('-created')
         .skip((req.params.page - 1) * 5)
         .limit(5)
