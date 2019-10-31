@@ -63,19 +63,37 @@ exports.updateReply = function (req, res) {
 
 
 exports.list = function (req, res) {
-    Post.model
-        .find({ category: req.query.category, categoryName: req.query.categoryName}, { user_id: 0, 'reply.user_id': 0 })
-        .sort('-created')
-        .skip((req.params.page - 1) * 5)
-        .limit(5)
-        .exec((err, posts) => {
+    let promise1 = new Promise((resolve, reject) => {
+        Post.model.find({ category: req.query.category, categoryName: req.query.categoryName }).count().exec((err, count) => {
             if (err) {
-                let message = 'Server error.';
-                let detail = '500. When get list of posts.';
-                error (message, detail, res, 500);
+                reject(err);
             }
-            return res.status(200).json({ posts: posts });
+            resolve(count);
         });
+    });
+    let promise2 = new Promise((resolve, reject) => {
+        Post.model
+            .find({ category: req.query.category, categoryName: req.query.categoryName }, { user_id: 0, 'reply.user_id': 0 })
+            .sort('-created')
+            .skip((req.params.page - 1) * 15)
+            .limit(15)
+            .exec((err, posts) => {
+                if (err) {
+                    reject(err);
+                }
+                resolve(posts);
+            });
+    });
+    Promise.all([promise1, promise2]).then(results => {
+        return res.status(200).json({
+            count: results[0],
+            posts: results[1],
+        })
+    }).catch(err => {
+        let message = 'Server error.';
+        let detail = '500. When find my posts.';
+        return error(message, detail, res, 500);
+    });
 };
 
 
