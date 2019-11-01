@@ -4,15 +4,16 @@ var Post = keystone.list('Post');
 
 
 exports.list = function (req, res) {
+    const searchWord = req.query.searchWord;
     Post.model
         .aggregate([
             { $facet: {
                 posts: [
-                    { $match: { category: 'post' } },
+                    { $match: searchWord ? { category: 'post', categoryName: {$regex : '.*' + searchWord + '.*'} } : { category: 'post' } },
                     { $group: { _id: '$categoryName', count: {$sum: 1} } },
                 ],
                 albums: [
-                    { $match: { category: 'album' } },
+                    { $match: searchWord ? { category: 'album', categoryName: {$regex : '.*' + searchWord + '.*'} } : { category: 'album' } },
                     { $group: { _id: '$categoryName', count: {$sum: 1} } },
                 ]
             }}
