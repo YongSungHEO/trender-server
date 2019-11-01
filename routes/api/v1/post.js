@@ -63,17 +63,30 @@ exports.updateReply = function (req, res) {
 
 
 exports.list = function (req, res) {
+    const searchWord = req.query.searchWord;
+    const defaultCondition = {
+        category: req.query.category,
+        categoryName: req.query.categoryName
+    };
+    const searchCondition = {
+        category: req.query.category,
+        categoryName: req.query.categoryName,
+        title: {$regex : '.*' + searchWord + '.*'}
+    };
     let promise1 = new Promise((resolve, reject) => {
-        Post.model.find({ category: req.query.category, categoryName: req.query.categoryName }).count().exec((err, count) => {
-            if (err) {
-                reject(err);
-            }
-            resolve(count);
-        });
+        Post.model
+            .find(searchWord ? searchCondition : defaultCondition)
+            .count()
+            .exec((err, count) => {
+                if (err) {
+                    reject(err);
+                }
+                resolve(count);
+            });
     });
     let promise2 = new Promise((resolve, reject) => {
         Post.model
-            .find({ category: req.query.category, categoryName: req.query.categoryName }, { user_id: 0, 'reply.user_id': 0 })
+            .find(searchWord ? searchCondition : defaultCondition, { user_id: 0, 'reply.user_id': 0 })
             .sort('-created')
             .skip((req.params.page - 1) * 15)
             .limit(15)
@@ -88,7 +101,7 @@ exports.list = function (req, res) {
         return res.status(200).json({
             count: results[0],
             posts: results[1],
-        })
+        });
     }).catch(err => {
         let message = 'Server error.';
         let detail = '500. When find my posts.';
