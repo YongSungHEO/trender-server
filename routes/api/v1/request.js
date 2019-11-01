@@ -49,7 +49,8 @@ exports.update = function (req, res) {
             let newCategory = new Category.model({
                 category: request.category,
                 categoryName: request.categoryName,
-                creator: request.nickname
+                creator: request.nickname,
+                description: request.description
             });
             let promise2 = new Promise((resolve, reject) => {
                 if (request.state === 'permitted') {

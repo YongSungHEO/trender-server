@@ -1,6 +1,7 @@
 var keystone = require('keystone');
 
 var Post = keystone.list('Post');
+var Category = keystone.list('Category');
 
 
 exports.create = function (req, res) {
@@ -97,10 +98,20 @@ exports.list = function (req, res) {
                 resolve(posts);
             });
     });
-    Promise.all([promise1, promise2]).then(results => {
+    let promise3 = new Promise((resolve, reject) => {
+        Category.model.findOne({ categoryName: req.query.categoryName }).exec((err, category) => {
+            if (err) {
+                reject(err);
+            }
+            resolve(category);
+        });
+    })
+    Promise.all([promise1, promise2, promise3]).then(results => {
         return res.status(200).json({
             count: results[0],
             posts: results[1],
+            creator: results[2].creator,
+            description: results[2].description
         });
     }).catch(err => {
         let message = 'Server error.';

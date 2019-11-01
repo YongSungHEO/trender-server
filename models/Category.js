@@ -10,6 +10,7 @@ Category.add({
     ] },
 	categoryName: { type: String, initial: true, required: true, unique: true, noedit: true },
     creator: { type: String, initial: true, required: true, noedit: true },
+    description: { type: Types.Text, initial: true, required: true, noedit: true },
     created: { type: Date, required: true, initial: true, noedit: true, default: Date.now },
 });
 
