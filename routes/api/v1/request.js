@@ -82,14 +82,19 @@ exports.list = function (req, res) {
         let detail = '403. Not admin level.';
         return error(message, detail, res, 403);
     }
-    Request.model.find().sort('-requestTime').exec((err, requests) => {
-        if (err) {
-            let message = 'Server error.';
-            let detail = '500. When get list of requests.';
-            return error(message, detail, res, 500);
-        }
-        return res.status(200).json({ requests: requests });
-    });
+    Request.model
+        .find()
+        .sort('-requestTime')
+        .skip((req.params.page - 1) * 12)
+        .limit(12)
+        .exec((err, requests) => {
+            if (err) {
+                let message = 'Server error.';
+                let detail = '500. When get list of requests.';
+                return error(message, detail, res, 500);
+            }
+            return res.status(200).json({ requests: requests });
+        });
 }
 
 
