@@ -84,6 +84,18 @@ exports.list = function (req, res) {
 };
 
 
+exports.detail = function (req, res) {
+    Category.model.findOne({ categoryName: req.params.categoryName }).exec((err, category) => {
+        if (err) {
+            const message = 'Server error.';
+            const detail = '500. When find specific category.';
+            error (message, detail);
+        }
+        return res.status(200).json({ category: category });
+    });
+}
+
+
 function error (message, detail, res, status) {
     return res.status(status).json({
         error: {
