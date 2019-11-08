@@ -82,19 +82,38 @@ exports.list = function (req, res) {
         let detail = '403. Not admin level.';
         return error(message, detail, res, 403);
     }
-    Request.model
-        .find()
-        .sort('-requestTime')
-        .skip((req.params.page - 1) * 12)
-        .limit(12)
-        .exec((err, requests) => {
+
+    let promise1 = new Promise((resolve, reject) => {
+        Request.model.find().count().exec((err, count) => {
             if (err) {
-                let message = 'Server error.';
-                let detail = '500. When get list of requests.';
-                return error(message, detail, res, 500);
+                reject(err);
             }
-            return res.status(200).json({ requests: requests });
+            resolve(count);
         });
+    });
+
+    let promise2 = new Promise((resolve, reject) => {
+        Request.model.find({}, { user_id: 0 })
+            .sort('-requestTime')
+            .skip((req.params.page - 1) * 12)
+            .limit(12)
+            .exec((err, requests) => {
+                if (err) {
+                    reject(err);
+                }
+                resolve(requests);
+            });
+    });
+    Promise.all([promise1, promise2]).then(results => {
+        return res.status(200).json({
+            count: results[0],
+            requests: results[1],
+        })
+    }).catch(err => {
+        let message = 'Server error.';
+        let detail = '500. When find requests.';
+        return error(message, detail, res, 500);
+    });
 }
 
 
