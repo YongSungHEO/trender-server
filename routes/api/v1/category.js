@@ -41,28 +41,36 @@ exports.list = function (req, res) {
     Promise.all([promise1, promise2]).then(results => {
         const categories = results[0];
         const aggregated = results[1][0];
-        let toAdd1 = categories
-                        .filter(category => {
-                            return category.category === 'post' && !aggregated.posts.some(post => { return post._id === category.categoryName })
-                        });
-        let toAdd2 = categories
-                        .filter(category => {
-                            return category.category === 'album' && !aggregated.posts.some(post => { return post._id === category.categoryName })
-                        });
-        toAdd1.map(item => {
-            const added = {
-                _id: item.categoryName,
-                count: 0,
-            };
-            aggregated.posts.push(added);
-        });
-        toAdd2.map(item => {
-            const added = {
-                _id: item.categoryName,
-                count: 0,
-            };
-            aggregated.albums.push(added);
-        });
+        if (!searchWord) {
+            let toAdd1 = categories
+                            .filter(category => {
+                                return category.category === 'post'
+                                        && !aggregated.posts.some(post => {
+                                                return post._id === category.categoryName
+                                            })
+                            });
+            let toAdd2 = categories
+                            .filter(category => {
+                                return category.category === 'album'
+                                        && !aggregated.posts.some(post => {
+                                                return post._id === category.categoryName
+                                            })
+                            });
+            toAdd1.map(item => {
+                const added = {
+                    _id: item.categoryName,
+                    count: 0,
+                };
+                aggregated.posts.push(added);
+            });
+            toAdd2.map(item => {
+                const added = {
+                    _id: item.categoryName,
+                    count: 0,
+                };
+                aggregated.albums.push(added);
+            });
+        }
         return res.status(200).json({
             posts: aggregated.posts,
             albums: aggregated.albums,
