@@ -45,6 +45,9 @@ exports = module.exports = function (app) {
 	// Views
     app.get('/', routes.views.index);
 
+    // AWS
+    app.get('/api/v1/auth/aws', middleware.checkAuth, routes.auth.aws.get);
+
     // Sign up
     app.post('/api/v1/my/signup', routes.auth.signup.signUp);
     app.post('/api/v1/my/checkemail', routes.auth.signup.checkEmail);
