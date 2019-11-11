@@ -63,6 +63,32 @@ exports.updateReply = function (req, res) {
 };
 
 
+exports.updatePostLike = function (req, res) {
+    Post.model.findOne({ _id: req.body.post_id }).exec((err, post) => {
+        if (err) {
+            let message = 'Server error.';
+            let detail = '500. When get post for update post like.';
+            return error(message, detail, res, 500);
+        }
+        if (post.likeUsers.some(nickname => nickname === req.user.nickname )) {
+            post.likeUsers.splice(req.user.nickname, 1);
+            post.like--;
+        } else {
+            post.likeUsers = post.likeUsers.concat([req.user.nickname]);
+            post.like++;
+        }
+        post.save((err, updated) => {
+            if (err) {
+                let message = 'Server error.';
+                let detail = '500. When update post like.';
+                return error (message, detail, res, 500);
+            }
+            return res.status(200).json({ like: updated.like });
+        });
+    });
+};
+
+
 exports.list = function (req, res) {
     const searchWord = req.query.searchWord;
     const defaultCondition = {

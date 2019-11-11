@@ -81,6 +81,7 @@ exports = module.exports = function (app) {
     // Post
     app.post('/api/v1/posts', middleware.checkAuth, routes.api.post.create);
     app.put('/api/v1/posts-reply', middleware.checkAuth, routes.api.post.updateReply);
+    app.put('/api/v1/posts-like', middleware.checkAuth, routes.api.post.updatePostLike);
     app.get('/api/v1/posts/:page', routes.api.post.list);
     app.get('/api/v1/posts-hot', routes.api.post.listHot);
     app.delete('/api/v1/posts', middleware.checkAuth, routes.api.post.delete);
