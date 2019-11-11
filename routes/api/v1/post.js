@@ -121,6 +121,44 @@ exports.list = function (req, res) {
 };
 
 
+exports.listHot = function (req, res) {
+    let promise1 = new Promise((resolve, reject) => {
+        Post.model
+        .find({ category: 'post' })
+        .sort('like')
+        .limit(10)
+        .exec((err, posts) => {
+            if (err) {
+                reject(err);
+            }
+            resolve(posts);
+        });
+    });
+    let promise2 = new Promise((resolve, reject) => {
+        Post.model
+        .find({ category: 'album' })
+        .sort('like')
+        .limit(4)
+        .exec((err, posts) => {
+            if (err) {
+                reject(err);
+            }
+            resolve(posts);
+        });
+    });
+    Promise.all([promise1, promise2]).then(results => {
+        return res.status(200).json({
+            posts: results[0],
+            albums: results[1]
+        });
+    }).catch(err => {
+        let message = 'Server error.';
+        let detail = '500. When get hot posts.';
+        return error(message, detail, res, 500);
+    });
+};
+
+
 exports.delete = function (req, res) {
     Post.model.findOne({ _id: req.body.post_id }).remove().exec((err, result) => {
         if (err) {
