@@ -89,6 +89,26 @@ exports.updatePostLike = function (req, res) {
 };
 
 
+exports.updateView = function (req, res) {
+    Post.model.findOne({ _id: req.body.post_id }).exec((err, post) => {
+        if (err) {
+            let message = 'Server error.';
+            let detail = '500. When get post for update view.';
+            return error(message, detail, res, 500);
+        }
+        post.view++;
+        post.save((err, updated) => {
+            if (err) {
+                let message = 'Server error.';
+                let detail = '500. When update post view.';
+                return error (message, detail, res, 500);
+            }
+            return res.status(200).json({ result: 'success' });
+        });
+    });
+};
+
+
 exports.list = function (req, res) {
     const searchWord = req.query.searchWord;
     const defaultCondition = {
