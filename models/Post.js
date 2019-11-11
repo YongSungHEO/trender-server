@@ -14,6 +14,7 @@ Post.add({
     title: { type: String, initial: true, noedit: true },
     description: { type: Types.Text, initial: true, required: true, noedit: true },
     imageURL: { type: String, noedit: true },
+    imageName: { type: String, noedit: true },
     like: { type: Number, noedit: true, default: 0 },
     likeUsers: { type: Types.TextArray, noedit: true },
     view: { type: Number, noedit: true, default: 0 },

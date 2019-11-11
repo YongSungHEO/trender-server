@@ -14,6 +14,7 @@ exports.create = function (req, res) {
             title: req.body.title,
             description: req.body.description,
             imageURL: req.body.imageURL,
+            imageName: req.body.imageName
         });
         newPost.save((err, created) => {
             if (err) {
