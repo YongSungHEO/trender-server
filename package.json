@@ -13,9 +13,23 @@
     "sha-256-js": "^1.0.3"
   },
   "devDependencies": {
+    "@babel/core": "^7.7.2",
+    "@babel/preset-env": "^7.7.1",
+    "@babel/register": "^7.7.0",
+    "del": "^5.1.0",
     "eslint": "3.15.0",
     "eslint-config-keystone": "3.0.0",
-    "eslint-plugin-react": "^5.1.1"
+    "eslint-plugin-react": "^5.1.1",
+    "gulp": "^4.0.2",
+    "gulp-better-rollup": "^4.0.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-javascript-obfuscator": "^1.1.6",
+    "gulp-rename": "^1.4.0",
+    "gulp-rollup": "^2.16.2",
+    "gulp-zip": "^5.0.1",
+    "merge-stream": "^2.0.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "vinyl-sourcemaps-apply": "^0.2.1"
   },
   "scripts": {
     "lint": "eslint .",

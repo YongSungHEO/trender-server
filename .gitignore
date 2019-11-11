@@ -29,3 +29,9 @@ node_modules
 
 # Ignore .DS_Store files on OS X
 .DS_Store
+
+# Ignore dist folder
+dist
+
+# Ignore trender zip file
+trender-server-zip
