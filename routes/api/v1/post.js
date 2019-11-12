@@ -172,7 +172,7 @@ exports.listHot = function (req, res) {
     let promise1 = new Promise((resolve, reject) => {
         Post.model
         .find({ category: 'post' })
-        .sort('like')
+        .sort('-like')
         .limit(10)
         .exec((err, posts) => {
             if (err) {
@@ -184,7 +184,7 @@ exports.listHot = function (req, res) {
     let promise2 = new Promise((resolve, reject) => {
         Post.model
         .find({ category: 'album' })
-        .sort('like')
+        .sort('-like')
         .limit(4)
         .exec((err, posts) => {
             if (err) {
