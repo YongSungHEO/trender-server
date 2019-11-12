@@ -52,8 +52,8 @@ exports.list = function (req, res) {
             let toAdd2 = categories
                             .filter(category => {
                                 return category.category === 'album'
-                                        && !aggregated.posts.some(post => {
-                                                return post._id === category.categoryName
+                                        && !aggregated.albums.some(album => {
+                                                return album._id === category.categoryName
                                             })
                             });
             toAdd1.map(item => {
