@@ -72,7 +72,7 @@ exports = module.exports = function (app) {
     // Request category
     app.post('/api/v1/category-requests', middleware.checkAuth, routes.api.request.create);
     app.put('/api/v1/category-requests', middleware.checkAuth, routes.api.request.update);
-    app.get('/api/v1/category-requests', middleware.checkAuth, routes.api.request.list);
+    app.get('/api/v1/category-requests/:page', middleware.checkAuth, routes.api.request.list);
 
     // Get category
     app.get('/api/v1/categories', routes.api.category.list);
