@@ -207,7 +207,7 @@ exports.listHot = function (req, res) {
 
 
 exports.delete = function (req, res) {
-    Post.model.findOne({ _id: req.body.post_id }).remove().exec((err, result) => {
+    Post.model.findOne({ _id: req.params.id, nickname: req.user.nickname }).remove().exec((err, result) => {
         if (err) {
             let message = 'Server error.';
             let detail = '500. When remove post.';
