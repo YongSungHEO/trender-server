@@ -28,6 +28,37 @@ exports.create = function (req, res) {
 };
 
 
+exports.updatePost = function (req, res) {
+    Post.model.findOne({ _id: req.params.id }).exec((err, post) => {
+        if (err) {
+            let message = 'Server error.';
+            let detail = '500. When find specific post for update.';
+            return error(message, detail, res, 500);
+        }
+        if (req.body.title) {
+            post.title = req.body.title;
+        }
+        if (req.body.description) {
+            post.description = req.body.description;
+        }
+        if (req.body.imageURL) {
+            post.imageURL = req.body.imageURL;
+        }
+        if (req.body.imageName) {
+            post.imageName = req.body.imageName;
+        }
+        post.save((err, updated) => {
+            if (err) {
+                let message = 'Server error.';
+                let detail = '500. When update post.';
+                return error(message, detail, res, 500);
+            }
+            return res.status(200).json({ result: 'Success' });
+        });
+    });
+};
+
+
 exports.updateReply = function (req, res) {
     Post.model.findOne({ _id: req.body.post_id }).exec((err, post) => {
         if (err) {
