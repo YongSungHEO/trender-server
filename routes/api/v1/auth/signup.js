@@ -73,8 +73,11 @@ exports.checkName = function (req, res) {
 
 
 function signUpValidation (userModel, res) {
-    if (!userModel.email) {
-        error400('Email is not exist.', '400. When signup.', res);
+    const regExp = /^[0-9a-zA-Z_]*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+    if (!userModel.email.match(regExp)) {
+        let message = 'Email format is wrong.';
+        let detail = '400. When sign up.';
+        error400(message, detail, res, 400);
         return false;
     }
     if (!userModel.password) {

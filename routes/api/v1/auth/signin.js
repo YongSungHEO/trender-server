@@ -75,7 +75,7 @@ exports.info = function (req, res) {
 
 
 function loginValidation (userModel, res) {
-    let regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+    const regExp = /^[0-9a-zA-Z_]*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
     if (!userModel.email.match(regExp)) {
         let message = 'Email format is wrong.';
         let detail = '400. When check email validation.';
