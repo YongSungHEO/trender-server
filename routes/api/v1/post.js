@@ -142,6 +142,7 @@ exports.updateView = function (req, res) {
 
 
 exports.list = function (req, res) {
+    const limitCount = req.query.category === 'post' ? 15 : 9;
     const searchWord = req.query.searchWord;
     const defaultCondition = {
         category: req.query.category,
@@ -167,8 +168,8 @@ exports.list = function (req, res) {
         Post.model
             .find(searchWord ? searchCondition : defaultCondition, { user_id: 0, 'reply.user_id': 0 })
             .sort('-created')
-            .skip((req.params.page - 1) * 15)
-            .limit(15)
+            .skip((req.params.page - 1) * limitCount)
+            .limit(limitCount)
             .exec((err, posts) => {
                 if (err) {
                     reject(err);
